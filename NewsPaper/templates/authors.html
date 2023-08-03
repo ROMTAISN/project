@@ -1,0 +1,30 @@
+{% extends 'flatpages/default.html' %}
+
+
+{% block title %}
+Authors
+{% endblock title %}
+
+{% block content %}
+<h1>Все авторы</h1>
+<h3>Количество авторов: {{ authors|length }}</h3>
+<hr>
+<center>
+    {% if authors %}
+        <table>
+            <tr>
+                <td><b>Имя автора</b></td>
+                <td><b>Рейтинг</b></td>
+            </tr>
+            {% for author in authors %}
+            <tr>
+                <td>{{ author.author_user }}</td>
+                <td>{{ author.ratting_author}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+</center>
+    {% else %}
+        <h2>Список авторов пуст!</h2>
+    {% endif %}
+{% endblock content %}
