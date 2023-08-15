@@ -7,17 +7,17 @@ Posts
 {% endblock title %}
 
 {% block content %}
-<h1>Все новости и статьи</h1>
-<h3>Количество: {{ posts|length }}</h3>
+<h1>Все статьи</h1>
+<h3>Количество: {{ article|length }}</h3>
 <hr>
-    {% if posts %}
+    {% if article %}
         <table>
             <tr>
                 <td><b>Заголовок</b></td>
                 <td><b>Дата публикации</b></td>
                 <td><b>Содержание</b></td>
             </tr>
-            {% for post in posts %}
+            {% for post in article %}
             <tr>
                 <td>{{ post.heading|censor }}</td>
                 <td>{{ post.date_time_create|date:'d M Y' }}</td>
@@ -26,7 +26,7 @@ Posts
             {% endfor %}
         </table>
     {% else %}
-        <h2>Список постов пуст!</h2>
+        <h2>Список статей пуст!</h2>
     {% endif %}
    {% if page_obj.has_previous %}
        <a href="?page=1">1</a>

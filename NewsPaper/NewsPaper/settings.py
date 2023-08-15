@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'fpages',
     'news',
     'accounts',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

@@ -3,21 +3,24 @@
 {% load custom_filters %}
 
 {% block title %}
-Posts
+Search
 {% endblock title %}
 
 {% block content %}
-<h1>Все новости и статьи</h1>
-<h3>Количество: {{ posts|length }}</h3>
+<h1>Поиск новости или статьи</h1>
+<form action="" method="get">
+    {{ filterset.form.as_p }}
+    <input type="submit" value="Найти" />
+</form>
 <hr>
-    {% if posts %}
+    {% if search %}
         <table>
             <tr>
                 <td><b>Заголовок</b></td>
                 <td><b>Дата публикации</b></td>
                 <td><b>Содержание</b></td>
             </tr>
-            {% for post in posts %}
+            {% for post in search %}
             <tr>
                 <td>{{ post.heading|censor }}</td>
                 <td>{{ post.date_time_create|date:'d M Y' }}</td>
