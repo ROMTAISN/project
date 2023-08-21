@@ -82,6 +82,13 @@ class Post(models.Model):
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
 
+class News(Post):
+    def __init__(self, *args, **kwargs):
+        super(News, self).__init__(*args, **kwargs)
+        # Отфильтровываем посты с параметром category_type = 'NW'
+        news_post = Post.objects.filter(category_type='NW')
+        return news_post
+
 
 class PostCategory(models.Model):
     post_through = models.ForeignKey(Post, on_delete=models.CASCADE)

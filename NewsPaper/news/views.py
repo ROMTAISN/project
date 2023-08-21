@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Author
@@ -38,10 +38,12 @@ class NewsList(ListView):
     template_name = 'news.html'
     context_object_name = 'news'
     paginate_by = 10
-    # content_type =
 
-    # def get_queryset(self):
-    #     news = self.content
+    def get_queryset(self):
+        # Фильтрация постов с параметром category_type = 'NW'
+        queryset = super().get_queryset()
+        queryset = queryset.filter(category_type='NW')
+        return queryset
 
 
 class ArticleList(ListView):
@@ -50,6 +52,12 @@ class ArticleList(ListView):
     template_name = 'article.html'
     context_object_name = 'article'
     paginate_by = 10
+
+    def get_queryset(self):
+        # Фильтрация постов с параметром category_type = 'AR'
+        queryset = super().get_queryset()
+        queryset = queryset.filter(category_type='AR')
+        return queryset
 
 
 class SearchList(ListView):
@@ -70,7 +78,8 @@ class SearchList(ListView):
         return context
 
 
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     form_class = NewsForm
     model = Post
     template_name = 'news_create.html'
@@ -78,10 +87,12 @@ class NewsCreate(CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.category_type = 'NW'
+        # form.instance.author = self.request.user.author
         return super().form_valid(form)
 
 
-class ArticleCreate(CreateView):
+class ArticleCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     form_class = ArticleForm
     model = Post
     template_name = 'article_create.html'
@@ -92,25 +103,42 @@ class ArticleCreate(CreateView):
         return super().form_valid(form)
 
 
-class NewsUpdate(UpdateView):
+class NewsUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     form_class = NewsForm
     model = Post
     template_name = 'news_create.html'
 
 
-class NewsDelete(DeleteView):
+class NewsDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('news.delete_post',)
     model = Post
     template_name = 'news_delete.html'
     success_url = reverse_lazy('post_list')
 
 
-class ArticleUpdate(UpdateView):
+class ArticleUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     form_class = ArticleForm
     model = Post
     template_name = 'article_create.html'
 
 
-class ArticleDelete(DeleteView):
+class ArticleDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('news.delete_post',)
     model = Post
     template_name = 'article_delete.html'
     success_url = reverse_lazy('post_list')
+
+# временный класс, для проверки прав доступа
+# class PostCreate(PermissionRequiredMixin, CreateView):
+#     permission_required = ('news.add_post',)
+#     form_class = PostForm
+#     model = Post
+#     template_name = 'post_create.html'
+#
+#     def form_valid(self, form):
+#         post = form.save(commit=False)
+#         post.category_type = 'NW'
+#         # form.instance.author = self.request.user.author
+#         return super().form_valid(form)

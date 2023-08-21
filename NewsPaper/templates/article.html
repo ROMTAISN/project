@@ -7,21 +7,37 @@ Posts
 {% endblock title %}
 
 {% block content %}
+{% if request.user.is_authenticated %}
+    <a href="{% url 'account_logout' %}">Выйти из аккаунта</a>
+{% else %}
+    <a href="{% url 'account_login' %}">Войти в аккаунт</a>
+{% endif %}
 <h1>Все статьи</h1>
 <h3>Количество: {{ article|length }}</h3>
 <hr>
+{% if perms.news.add_post %}
+    <a href="{% url 'article_create' %}">Добавить статью</a>
+{% endif %}
     {% if article %}
         <table>
             <tr>
                 <td><b>Заголовок</b></td>
                 <td><b>Дата публикации</b></td>
                 <td><b>Содержание</b></td>
+                {% if perms.news.change_post %}
+                <td>Действия</td>
+                {% endif %}
             </tr>
             {% for post in article %}
             <tr>
                 <td>{{ post.heading|censor }}</td>
                 <td>{{ post.date_time_create|date:'d M Y' }}</td>
                 <td>{{ post.content|truncatewords:20|censor }}</td>
+                <td>
+                    {% if perms.news.change_post %}
+                    <a href="{% url 'article_update' post.id %}">Изменить</a>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </table>
