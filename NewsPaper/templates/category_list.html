@@ -13,12 +13,12 @@ Posts
     <a href="{% url 'account_login' %}">Войти в аккаунт</a>
 {% endif %}
 <h1>Все новости</h1>
-<h3>Количество: {{ news|length }}</h3>
+<h3>Количество: {{ category_news_list|length }}</h3>
+  {% if is_not_subscriber %}
+    <p class="text-center"><a href="{% url 'subscribe' category.id %}" class="btn btn-secondary btn-sm">Подписаться</a></p>
+  {% endif %}
 <hr>
-{% if perms.news.add_post %}
-    <a href="{% url 'news_create' %}">Добавить новость</a>
-{% endif %}
-    {% if news %}
+    {% if category_news_list %}
         <table>
             <tr>
                 <td><b>Заголовок</b></td>
@@ -26,12 +26,12 @@ Posts
                 <td><b>Категории</b></td>
                 <td><b>Содержание</b></td>
 
-                {% if perms.news.change_post %}
+                {% if perms.category_news_list.change_post %}
                 <td>Действия</td>
                 {% endif %}
 
             </tr>
-            {% for post in news %}
+            {% for post in category_news_list %}
             <tr>
                 <td>{{ post.heading|censor }}</td>
                 <td>{{ post.date_time_create|date:'d M Y' }}</td>
@@ -41,7 +41,7 @@ Posts
                 <td>{{ post.content|truncatewords:20|censor }}</td>
 
                 <td>
-                    {% if perms.news.change_post %}
+                    {% if perms.category_news_list.change_post %}
                     <a href="{% url 'news_update' post.id %}">Изменить</a>
                     {% endif %}
                 </td>

@@ -10,6 +10,9 @@ Post
 {% block content %}
 <h3>Заголовок: {{ post.heading|censor }}</h3>
 <h4>Дата публикации:{{ post.date_time_create|date:'d M Y' }}</h4>
+<h5>Категория:{% for category in post.categoryPost.all %}
+                        <a href="{% url 'category_list' category.id %}">{{ category }}</a>
+                    {% endfor %}</h5>
 <b>Содержание:</b>
 <p>
     {{ post.content|censor }}

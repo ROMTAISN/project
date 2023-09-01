@@ -1,7 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.urls import reverse_lazy
+from django.contrib.auth.models import Group
+from django.shortcuts import redirect, get_object_or_404, render
+from django.urls import reverse_lazy, resolve
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Author
+from .models import Post, Author, Category
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm
 # Create your views here.
@@ -142,3 +145,39 @@ class ArticleDelete(PermissionRequiredMixin, DeleteView):
 #         post.category_type = 'NW'
 #         # form.instance.author = self.request.user.author
 #         return super().form_valid(form)
+
+
+@login_required
+def upgrade_me(request):
+    user = request.user
+    premium_group = Group.objects.get(name='Authors')
+    if not request.user.groups.filter(name='Authors').exists():
+        premium_group.user_set.add(user)
+    return redirect('/posts/news')
+
+class CategoryListView(ListView):
+    model = Post
+    template_name = 'category_list.html'
+    context_object_name = 'category_news_list'
+    paginate_by = 10
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, id=self.kwargs['pk'])
+        queryset = Post.objects.filter(categoryPost=self.category).order_by('-date_time_create')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_subscriber'] = self.request.user not in self.category.subcsribers.all()
+        context['category'] = self.category
+        return context
+
+@login_required
+def subscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subcsribers.add(user)
+
+    message = f'Вы успешно подписались на рассылку новостей категории'
+
+    return render(request, 'subscribe.html', {'category': category, 'message': message})

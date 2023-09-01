@@ -33,10 +33,14 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True, verbose_name='Название')
-    namePost = models.ManyToManyField('Post', through='PostCategory')
+    # namePost = models.ManyToManyField('Post', through='PostCategory')
+    subcsribers = models.ManyToManyField(User, related_name='categories')
+
+    def get_category(self):
+        return self.name
 
     def __str__(self):
-        return self.name.title()
+        return self.name
 
 
     class Meta:
@@ -53,12 +57,15 @@ class Post(models.Model):
         (NEWS, 'Новость'),
         (ARTICLE, 'Статья'),
     )
-    category_type = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=NEWS, verbose_name='Категория')
+    category_type = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=NEWS, verbose_name='Тип')
     date_time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    categoryPost = models.ManyToManyField('Category', through='PostCategory', )
+    categoryPost = models.ManyToManyField(Category, through='PostCategory', verbose_name='Категория')
     heading = models.CharField(max_length=255, verbose_name='Заголовок')
     content = models.TextField(verbose_name='Текст')
     ratting_post = models.SmallIntegerField(default=0, verbose_name='Рейтинг поста')
+
+    def preview(self):
+        return f'{self.content[:123]}...'
 
     def like(self):
         self.ratting_post += 1
@@ -68,8 +75,7 @@ class Post(models.Model):
         self.ratting_post -= 1
         self.save()
 
-    def preview(self):
-        return f'{self.content[:123]}...'
+
 
     def __str__(self):
         return f'{self.heading}. Автор: {self.author.author_user.username} Рейтинг статьи: {self.ratting_post}'
@@ -91,8 +97,11 @@ class News(Post):
 
 
 class PostCategory(models.Model):
-    post_through = models.ForeignKey(Post, on_delete=models.CASCADE)
-    category_through = models.ForeignKey(Category, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.post.heading} | {self.category.name}'
 
 
 class Comment(models.Model):
