@@ -1,11 +1,10 @@
-from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 
 from NewsPaper import settings
-from .models import Post, Category, PostCategory
+from .models import PostCategory
 
 
 # @receiver(post_save, sender=Post)
@@ -32,33 +31,34 @@ from .models import Post, Category, PostCategory
 #         msg.attach_alternative(html_content, 'text/html')
 #         msg.send()
 
-def send_notifications(preview, pk, heading, subscribers):
-    html_content = render_to_string(
-        'post_created_email.html',
-        {
-            'text': preview,
-            'link': f'{settings.SITE_URL}/posts/{pk}'
-        }
-    )
 
-    msg = EmailMultiAlternatives(
-        subject=heading,
-        body='',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=subscribers,
-    )
 
-    msg.attach_alternative(html_content, 'text/html')
-    msg.send()
-
-@receiver(m2m_changed, sender=PostCategory)
-def notify_about_new_post(sender, instance, **kwargs):
-    if kwargs['action'] == 'post_add':
-        categories = instance.categoryPost.all()
-        subscribers: list[str] = []
-        for category in categories:
-            subscribers += category.subcsribers.all()
-
-        subscribers = [s.email for s in subscribers]
-
-        send_notifications(instance.preview(), instance.pk, instance.heading, subscribers)
+# @receiver(m2m_changed, sender=PostCategory)
+# def notify_about_new_post(sender, instance, **kwargs):
+#     if kwargs['action'] == 'post_add':
+#         categories = instance.categoryPost.all()
+#         subscribers: list[str] = []
+#         for category in categories:
+#             subscribers += category.subcsribers.all()
+#         subscribers = [s.email for s in subscribers]
+#
+#         def send_notifications(preview, pk, heading, subscribers):
+#             html_content = render_to_string(
+#                 'post_created_email.html',
+#                 {
+#                     'text': preview,
+#                     'link': f'{settings.SITE_URL}/posts/{pk}'
+#                 }
+#             )
+#             for subscriber in subscribers:
+#                 msg = EmailMultiAlternatives(
+#                     subject=heading,
+#                     body='',
+#                     from_email=settings.DEFAULT_FROM_EMAIL,
+#                     to=[subscriber],
+#                 )
+#
+#                 msg.attach_alternative(html_content, 'text/html')
+#                 msg.send()
+#
+#         send_notifications(instance.preview(), instance.pk, instance.heading, subscribers)

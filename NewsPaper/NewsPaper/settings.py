@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-^yfd+97jlp$eiq$3qdkwfac^cmu^i8h5uvm(9086iuz^%g&t6_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -159,7 +159,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_FORMS = {'signup': 'accounts.forms.CustomSignupForm'}
 
 SITE_URL = 'http://127.0.0.1:8000'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'ROMTAISN@yandex.ru'
@@ -170,12 +170,25 @@ DEFAULT_FROM_EMAIL = 'ROMTAISN@yandex.ru'
 
 SERVER_EMAIL = 'ROMTAISN@yandex.ru'
 MANAGERS = (
-    ('Ivan', 'ivan@yandex.ru'),
-    ('Petr', 'petr@yandex.ru'),
+    ('roman', 'tajjsumv.rma@yandex.ru'),
+    ('roman', 'tajjsumv.rma@gmail.com'),
 )
 ADMINS = (
-    ('anton', 'anton@yandex.ru'),
+    ('romtaisn', 'ROMTAISN@yandex.ru'),
 )
-APSCHEDULER_DATETIME_FORMAT = 'N j, Y, f:s a'
-APSCHEDULER_RUN_NOW_TIMEOUT = 25
+# APSCHEDULER_DATETIME_FORMAT = 'N j, Y, f:s a'
+# APSCHEDULER_RUN_NOW_TIMEOUT = 25
 
+# CELERY_BROKER_URL = 'redis://default:3imKuPgQrhSFM0bTwxIHDF2dzRHZksos@redis-19475.c304.europe-west1-2.gce.cloud.redislabs.com:19475'
+# CELERY_RESULT_BACKENG = 'redis://default:3imKuPgQrhSFM0bTwxIHDF2dzRHZksos@redis-19475.c304.europe-west1-2.gce.cloud.redislabs.com:19475'
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIER = 'json'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow'
+CELERY_TASK_TIME_LIMIT = 30 * 60

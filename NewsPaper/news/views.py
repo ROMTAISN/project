@@ -2,11 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.shortcuts import redirect, get_object_or_404, render
-from django.urls import reverse_lazy, resolve
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Author, Category
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm
+from .tasks import send_email_task
 # Create your views here.
 
 class PostList(ListView):
@@ -90,6 +91,8 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.category_type = 'NW'
+        post.save()
+        send_email_task.delay(post.pk)
         # form.instance.author = self.request.user.author
         return super().form_valid(form)
 

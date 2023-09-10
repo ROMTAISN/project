@@ -35,7 +35,6 @@ class Category(models.Model):
     name = models.CharField(max_length=128, unique=True, verbose_name='Название')
     # namePost = models.ManyToManyField('Post', through='PostCategory')
     subcsribers = models.ManyToManyField(User, related_name='categories')
-
     def get_category(self):
         return self.name
 
