@@ -44,19 +44,22 @@ def send_email_task(pk):
 def send_message_every_week():
     subscribers = set(Category.objects.values_list('subcsribers__email', flat=True))
     for sub in subscribers:
-        cat = Category.objects.filter(subcsribers__email=sub)
-        cate = set(cat.values_list('id', flat=True))
-        for c in cate:
-            posts = Post.objects.filter(categoryPost=c)
-            today = datetime.datetime.now()
-            last_week = today - datetime.timedelta(days=7)
-            p = posts.filter(date_time_create__gte=last_week)
+        cat = Category.objects.filter(subcsribers__email=sub).values_list('id', flat=True)
+        today = datetime.datetime.now()
+        last_week = today - datetime.timedelta(days=7)
+        posts = Post.objects.filter(date_time_create__gte=last_week)
+        relevant_posts = []
+        for post in posts:
+            cate = post.categoryPost.values_list('id', flat=True)
+            if any(c in cate for c in cat):
+                relevant_posts.append(post)
+        print(relevant_posts)
 
         html_content = render_to_string(
             'daily_post.html',
             {
                 'link': settings.SITE_URL,
-                'posts': p,
+                'posts': relevant_posts,
             },
         )
         msg = EmailMultiAlternatives(
