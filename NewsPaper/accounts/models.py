@@ -4,7 +4,6 @@ from django.db import models
 # Create your models here.
 class Personal(models.Model):
     user = models.OneToOneField(User, verbose_name='Логин', on_delete=models.CASCADE)
-    user_email = models.EmailField(("email address"), blank=True)
     name = models.CharField(max_length=64, verbose_name='Имя')
     surname = models.CharField(max_length=128, verbose_name='Фамилия')
     middle_name = models.CharField(max_length=128, verbose_name='Отчество')

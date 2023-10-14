@@ -321,9 +321,6 @@ LOGGING = {
             'propagate': True,
         },
     },
-
-
-
 }
 
 # 'loggers': {
