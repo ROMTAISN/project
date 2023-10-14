@@ -1,6 +1,8 @@
+from django import forms
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
 from django.core.mail import EmailMultiAlternatives
+from .models import Personal
 
 
 class CustomSignupForm(SignupForm):
@@ -22,3 +24,21 @@ class CustomSignupForm(SignupForm):
         msg.send()
 
         return user
+
+
+class AccountForm(forms.ModelForm):
+    name = forms.CharField(max_length=50)
+    surname = forms.CharField(max_length=50)
+    about_me = forms.CharField(min_length=30)
+
+    class Meta:
+        model = Personal
+        fields = [
+            'name',
+            'surname',
+            'middle_name',
+            'gender',
+            'country',
+            'city',
+            'about_me',
+        ]

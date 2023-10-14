@@ -26,14 +26,14 @@ Posts
                 <td><b>Категории</b></td>
                 <td><b>Содержание</b></td>
 
-                {% if perms.category_news_list.change_post %}
-                <td>Действия</td>
+                {% if perms.news.change_post %}
+                <td><b>Действия</b></td>
                 {% endif %}
 
             </tr>
             {% for post in category_news_list %}
             <tr>
-                <td>{{ post.heading|censor }}</td>
+                <td><a href="{% url 'post_detail' post.id %}">{{ post.heading|censor }}</a></td>
                 <td>{{ post.date_time_create|date:'d M Y' }}</td>
                 <td>{% for category in post.categoryPost.all %}
                         <a href="{% url 'category_list' category.id %}">{{ category }}</a>
@@ -41,8 +41,10 @@ Posts
                 <td>{{ post.content|truncatewords:20|censor }}</td>
 
                 <td>
-                    {% if perms.category_news_list.change_post %}
+                    {% if perms.news.change_post %}
+                    {% if post.author == request.user.author %}
                     <a href="{% url 'news_update' post.id %}">Изменить</a>
+                    {% endif %}
                     {% endif %}
                 </td>
 

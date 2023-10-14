@@ -5,7 +5,10 @@
     <title>Уведомление</title>
 </head>
 <body>
+{% load cache %}
+{% cache 300 h2 %}
 <h2>Здравствуйте! Новые новости за последнюю неделю</h2>
+{% endcache %}
 <ul>
     {% for post in posts %}
         <li><a href="{{ link }}{{ post.get_absolute_url }}">{{ post.heading }}</a> </li>

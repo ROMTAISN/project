@@ -14,60 +14,73 @@ Posts
 {% endif %}
 <h1>Все новости</h1>
 <h3>Количество: {{ news|length }}</h3>
+{% if request.user.author %}
+    <h5>Вы являетесь автором и можете добавлять новости!</h5>
+{% else %}
+<button>
+    <a class="nav-link" href="{% url 'upgrade' %}">
+        <h4><strong>Стать автором</strong></h4>
+    </a>
+</button>
+{% endif %}
 <hr>
 {% if perms.news.add_post %}
     <a href="{% url 'news_create' %}">Добавить новость</a>
 {% endif %}
-    {% if news %}
-        <table>
-            <tr>
-                <td><b>Заголовок</b></td>
-                <td><b>Дата публикации</b></td>
-                <td><b>Категории</b></td>
-                <td><b>Содержание</b></td>
+{% if news %}
+    <table>
+        <tr>
+            {% load cache %}
+            {% cache 300 td %}
+            <td><b>Заголовок</b></td>
+            <td><b>Дата публикации</b></td>
+            <td><b>Категории</b></td>
+            <td><b>Содержание</b></td>
+            {% endcache %}
 
-                {% if perms.news.change_post %}
-                <td>Действия</td>
-                {% endif %}
-
-            </tr>
-            {% for post in news %}
-            <tr>
-                <td>{{ post.heading|censor }}</td>
+            {% if perms.news.change_post %}
+                <td><b>Действия</b></td>
+            {% endif %}
+        </tr>
+        {% for post in news %}
+            <tr class="{% cycle 'blue' 'white' %}">
+                <td><a href="{% url 'post_detail' post.id %}">{{ post.heading|censor }}</a></td>
                 <td>{{ post.date_time_create|date:'d M Y' }}</td>
                 <td>{% for category in post.categoryPost.all %}
                         <a href="{% url 'category_list' category.id %}">{{ category }}</a>
                     {% endfor %}</td>
                 <td>{{ post.content|truncatewords:20|censor }}</td>
-
                 <td>
                     {% if perms.news.change_post %}
-                    <a href="{% url 'news_update' post.id %}">Изменить</a>
+                    {% if post.author == request.user.author %}
+                        <a href="{% url 'news_update' post.id %}">Изменить</a>
+                    {% endif %}
                     {% endif %}
                 </td>
 
             </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <h2>Список новостей пуст!</h2>
-    {% endif %}
-   {% if page_obj.has_previous %}
-       <a href="?page=1">1</a>
-       {% if page_obj.previous_page_number != 1 %}
+        {% endfor %}
+    </table>
+{% else %}
+    <h2>Список новостей пуст!</h2>
+{% endif %}
+{% if page_obj.has_previous %}
+    <a href="?page=1">1</a>
+
+    {% if page_obj.previous_page_number != 1 %}
            ...
            <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
-       {% endif %}
-   {% endif %}
+    {% endif %}
+{% endif %}
 
-   {{ page_obj.number }}
+{{ page_obj.number }}
 
-   {% if page_obj.has_next %}
-       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
-       {% if paginator.num_pages != page_obj.next_page_number %}
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+    {% if paginator.num_pages != page_obj.next_page_number %}
            ...
-           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
-       {% endif %}
-   {% endif %}
+        <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+    {% endif %}
+{% endif %}
 
 {% endblock content %}

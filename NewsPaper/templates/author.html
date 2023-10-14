@@ -7,4 +7,38 @@ Author
 
 {% block content %}
 <h1>{{ author }}</h1>
+{% if author %}
+        <table>
+            <tr>
+                <td><b>Заголовок</b></td>
+                <td><b>Дата публикации</b></td>
+                <td><b>Категории</b></td>
+                <td><b>Содержание</b></td>
+
+                {% if perms.author.change_post %}
+                <td>Действия</td>
+                {% endif %}
+
+            </tr>
+            {% for post in author %}
+            <tr>
+                <td>{{ post.heading }}</td>
+                <td>{{ post.date_time_create|date:'d M Y' }}</td>
+                <td>{% for category in post.categoryPost.all %}
+                        <a href="{% url 'category_list' category.id %}">{{ category }}</a>
+                    {% endfor %}</td>
+                <td>{{ post.content }}</td>
+
+                <td>
+                    {% if perms.author.change_post %}
+                    <a href="{% url 'news_update' post.id %}">Изменить</a>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <h2>Список новостей пуст!</h2>
+    {% endif %}
 {% endblock content %}

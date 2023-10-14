@@ -1,0 +1,30 @@
+{% extends 'flatpages/default.html' %}
+
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<a href="{% url 'account_logout' %}">Выйти из аккаунта</a>
+{% else %}
+    <a href="{% url 'account_login' %}">Войти в аккаунт</a>
+{% endif %}
+<h3>Логин: {{ account.user_email }}</h3>
+<h4>Имя: {{ account.name }}</h4>
+<h4>Фамилия: {{ account.surname }}</h4>
+<h4>Отчество: {{ account.middle_name }}</h4>
+<h4>Пол: {{ account.gender }}</h4>
+<h4>Страна: {{ account.country }}</h4>
+<h4>Город: {{ account.city }}</h4>
+<b>О себе: {{ account.about_me }}</b>
+{% if perms.news.change_post %}
+{% if post.author == request.user.author %}
+<a href="{% url 'account_update' account.account_update %}">Изменить аккаунт</a>
+{% endif %}
+{% endif %}
+<hr>
+
+
+{% endblock content %}

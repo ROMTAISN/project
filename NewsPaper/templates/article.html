@@ -12,8 +12,18 @@ Posts
 {% else %}
     <a href="{% url 'account_login' %}">Войти в аккаунт</a>
 {% endif %}
+
 <h1>Все статьи</h1>
 <h3>Количество: {{ article|length }}</h3>
+{% if request.user.author %}
+<h5>Вы являетесь автором и можете добавлять статьи!</h5>
+{% else %}
+<button>
+    <a class="nav-link" href="{% url 'upgrade' %}">
+        <h4><strong>Стать автором</strong></h4>
+    </a>
+</button>
+{% endif %}
 <hr>
 {% if perms.news.add_post %}
     <a href="{% url 'article_create' %}">Добавить статью</a>
@@ -23,19 +33,25 @@ Posts
             <tr>
                 <td><b>Заголовок</b></td>
                 <td><b>Дата публикации</b></td>
+                <td><b>Категории</b></td>
                 <td><b>Содержание</b></td>
                 {% if perms.news.change_post %}
-                <td>Действия</td>
+                <td><b>Действия</b></td>
                 {% endif %}
             </tr>
             {% for post in article %}
             <tr>
-                <td>{{ post.heading|censor }}</td>
+                <td><a href="{% url 'post_detail' post.id %}">{{ post.heading|censor }}</a></td>
                 <td>{{ post.date_time_create|date:'d M Y' }}</td>
+                <td>{% for category in post.categoryPost.all %}
+                        <a href="{% url 'category_list' category.id %}">{{ category }}</a>
+                    {% endfor %}</td>
                 <td>{{ post.content|truncatewords:20|censor }}</td>
                 <td>
                     {% if perms.news.change_post %}
+                    {% if post.author == request.user.author %}
                     <a href="{% url 'article_update' post.id %}">Изменить</a>
+                    {% endif %}
                     {% endif %}
                 </td>
             </tr>

@@ -5,8 +5,11 @@ Create
 {% endblock title %}
 
 {% block content %}
+{% load cache %}
+{% cache 300 h1 %}
 <h1>Создание статьи</h1>
 <hr>
+{% endcache %}
 <form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}

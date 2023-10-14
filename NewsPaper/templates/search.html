@@ -7,7 +7,10 @@ Search
 {% endblock title %}
 
 {% block content %}
+{% load cache %}
+{% cache 300 h1 %}
 <h1>Поиск новости или статьи</h1>
+{% endcache %}
 <form action="" method="get">
     {{ filterset.form.as_p }}
     <input type="submit" value="Найти" />
@@ -16,9 +19,12 @@ Search
     {% if search %}
         <table>
             <tr>
+                {% load cache %}
+                {% cache 300 td %}
                 <td><b>Заголовок</b></td>
                 <td><b>Дата публикации</b></td>
                 <td><b>Содержание</b></td>
+                {% endcache %}
             </tr>
             {% for post in search %}
             <tr>

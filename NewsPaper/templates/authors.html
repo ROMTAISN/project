@@ -6,7 +6,10 @@ Authors
 {% endblock title %}
 
 {% block content %}
+{% load cache %}
+{% cache 300 h1 %}
 <h1>Все авторы</h1>
+{% endcache %}
 <h3>Количество авторов: {{ authors|length }}</h3>
 <hr>
 <center>
@@ -15,11 +18,13 @@ Authors
             <tr>
                 <td><b>Имя автора</b></td>
                 <td><b>Рейтинг</b></td>
+                <td><b>Статьи</b></td>
             </tr>
             {% for author in authors %}
             <tr>
-                <td>{{ author.author_user }}</td>
+                <td><a href="{% url 'author' author.id %}">{{ author.author_user }}</a></td>
                 <td>{{ author.ratting_author}}</td>
+                <td>Перейти</td>
             </tr>
             {% endfor %}
         </table>

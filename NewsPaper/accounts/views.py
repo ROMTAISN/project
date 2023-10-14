@@ -1,10 +1,12 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import User, Group
 from django.shortcuts import redirect
 from django.views.generic.edit import CreateView
-from .forms import CustomSignupForm
-
+from django.views.generic import DetailView, UpdateView
+from .forms import CustomSignupForm, AccountForm
+from .models import Personal
 
 class SignUp(CreateView):
     model = User
@@ -14,7 +16,30 @@ class SignUp(CreateView):
 
     # пробуем связать пользователя с моделью Автор
 
+class AccountDetail(DetailView):
+    model = Personal
+    template_name = 'account.html'
+    context_object_name = 'account'
 
+    def get_queryset(self):
+        # self.user = User.objects.values_list('username').filter(id=self.request.user.id)
+        queryset = Personal.objects.filter(user=self.request.user.id)
+        return queryset
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     queryset = queryset.filter(user=self.request.user.id)
+    #     return queryset
+
+
+class AccountUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('account.change_account',)
+    form_class = AccountForm
+    model = Personal
+    template_name = 'account_update.html'
+
+    def get_queryset(self):
+        queryset = Personal.objects.filter(user=self.request.user.id)
+        return queryset
 # @login_required
 # def upgrade_user(request):
 #     user = request.user
