@@ -1,0 +1,5 @@
+2023-10-15 00:11:17,820 INFO autoreload Watching for file changes with StatReloader
+2023-10-15 00:11:27,383 INFO basehttp "GET /posts/news/3/edit/ HTTP/1.1" 200 2971
+2023-10-15 00:11:30,271 INFO basehttp "POST /posts/news/3/edit/ HTTP/1.1" 302 0
+2023-10-15 00:11:30,337 INFO basehttp "GET /posts/3 HTTP/1.1" 200 3504
+2023-10-15 00:11:48,441 INFO autoreload C:\Users\tajjs\PycharmProjects\project\NewsPaper\NewsPaper\settings.py changed, reloading.

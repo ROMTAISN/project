@@ -3,16 +3,23 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404, render
 from django.template.context_processors import csrf, request
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import gettext as _
+from django.utils.translation import pgettext_lazy
 from django.core.cache import cache
 from .models import Post, Author, Category, Comment
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm, CommentForm
 from .tasks import send_email_task
+from django.utils import timezone
+
+import pytz
 # Create your views here.
 
 
@@ -22,6 +29,19 @@ class PostList(ListView):
     template_name = 'posts.html'
     context_object_name = 'posts'
     paginate_by = 10
+
+    def get(self, request):
+        current_time = timezone.now()
+        context = {
+            'current_time': timezone.localtime(timezone.now()),
+            'timezones': pytz.common_timezones
+        }
+
+        return HttpResponse(render(request, 'posts.html', context))
+
+    def post(self, request):
+        request.session['django_timezone'] = request.POST['timezone']
+        return redirect('/posts/')
 
 
 # class PostDetail(DetailView):
@@ -36,6 +56,7 @@ class PostList(ListView):
 #             obj = super().get_object(queryset=self.queryset)
 #             cache.set(f'post-{self.kwargs["pk"]}', obj)
 #         return obj
+
 
 class PostDetail(DetailView):
     model = Post
@@ -170,7 +191,7 @@ class NewsUpdate(PermissionRequiredMixin, UpdateView):
     permission_required = ('news.change_post',)
     form_class = NewsForm
     model = Post
-    template_name = 'news_create.html'
+    template_name = 'news_update.html'
 
     def get_queryset(self):
         queryset = super().get_queryset()

@@ -8,37 +8,60 @@ Post
 {% endblock title %}
 
 {% block content %}
+{% load i18n %}
+{% load tz %}
+<body>
+    <form action="{% url 'set_language' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ redirect_to }}">
+        {% get_current_language as LANGUAGE_CODE %}
+        <select name="language" id="">
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+
+            {% for language in languages %}
+                <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
+                    {{ language.name_local }} - {{ language.code }}
+                </option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="set">
+    </form>
+    {% get_current_timezone as TIME_ZONE %}
+    {{ TIME_ZONE }}
+<br>
+</body>
 {% if request.user.is_authenticated %}
-<a href="{% url 'account_logout' %}" >Выйти из аккаунта</a>
+<a href="{% url 'account_logout' %}" >{% trans "Выйти из аккаунта" %}</a>
 {% else %}
-    <a href="{% url 'account_login' %}">Войти в аккаунт</a>
+    <a href="{% url 'account_login' %}">{% trans "Войти в аккаунт" %}</a>
 {% endif %}
-<h3>Заголовок: {{ post.heading|censor }}</h3>
-<h4>Дата публикации:{{ post.date_time_create|date:'d M Y' }}</h4>
-<h5>Категория:{% for category in post.categoryPost.all %}
+<h3>{% trans "Заголовок" %}: {{ post.heading|censor }}</h3>
+<h4>{% trans "Дата публикации" %}:{{ post.date_time_create|date:'d M Y' }}</h4>
+<h5>{% trans "Категории" %}:{% for category in post.categoryPost.all %}
                         <a href="{% url 'category_list' category.id %}">{{ category }}</a>
                     {% endfor %}</h5>
-<b>Содержание:</b>
+<b>{% trans "Содержание" %}:</b>
 <p>
     {{ post.content|censor }}
 </p>
 {% if perms.news.change_post %}
 {% if post.author == request.user.author %}
-<a href="{% url 'news_update' post.id %}">Изменить</a>
+<a href="{% url 'news_update' post.id %}">{% trans "Изменить" %}</a>
 {% endif %}
 {% endif %}
 <hr>
-<h2> Комментарии </h2>
+<h2> {% trans "Комментарии" %} </h2>
 
      {% if user.is_authenticated %}
       <form action="" method="POST" id="main_form" class="comment_form">
          <div>
-             <label>Введите Ваш комментарий здесь: </label>
-            {{ comment_form.content_comment }} {% csrf_token %} <input type="submit" value="Отправить">
+             <label>{% trans "Введите Ваш комментарий здесь" %}: </label>
+            {{ comment_form.content_comment }} {% csrf_token %} <input type="submit" value="{% trans 'Отправить' %}">
          </div>
          </div>
       </form>
-      {% else %} <h2>Оставлять комментарии могут только зарегистрированные пользователи!</h2>
+      {% else %} <h2>{% trans "Оставлять комментарии могут только зарегистрированные пользователи" %}!</h2>
       {% endif %}
 
       {% for comment in comments %}
@@ -46,8 +69,8 @@ Post
 <font size="4"> <b>{{ comment.comment_user }} : </b> {{ comment.content_comment }}</font><br>
          <form action="" method="POST" class="comment_form">
             <div>
-                &nbsp; &nbsp; &nbsp;<label>Ответить:</label>
-               &nbsp; &nbsp; &nbsp;<input type="text" name="content_comment"> <input type="hidden" value="{{ comment.pk }}" name="parent"> {% csrf_token %} <input type="submit" value="Отправить">
+                &nbsp; <label>{% trans "Ответить" %}:</label>
+               &nbsp; &nbsp; &nbsp;<input type="text" name="content_comment"> <input type="hidden" value="{{ comment.pk }}" name="parent"> {% csrf_token %} <input type="submit" value="{% trans 'Отправить' %}">
             </div>
             </div>
          </form>

@@ -8,7 +8,7 @@ from .views import (PostList, PostDetail, AuthorList, AuthorDetail, NewsList, Ar
 
 
 urlpatterns = [
-    path('', cache_page(60)(PostList.as_view()), name='post_list'),
+    path('', PostList.as_view(), name='posts'),
     path('<int:pk>', PostDetail.as_view(), name='post_detail'),
     path('author/', AuthorList.as_view(), name='author_detail'),
     path('author/<int:pk>', AuthorDetail.as_view(), name='author'),

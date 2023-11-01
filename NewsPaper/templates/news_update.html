@@ -5,12 +5,12 @@ Create
 {% endblock title %}
 
 {% block content %}
-<h1>{% trans "Создание новости" %}</h1>
+<h1>{% trans "Изменение новости" %}</h1>
 <hr>
 <form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="{% trans 'Создать' %}" />
+    <input type="submit" value="{% trans 'Изменить' %}" />
 </form>
 
 {% endblock content %}

@@ -1,0 +1,187 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: .\news\forms.py:87
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-31 19:07+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\fpages\admin.py:11
+msgid "Advanced options"
+msgstr ""
+
+#: .\news\models.py:44
+msgid "category name"
+msgstr ""
+
+#: .\news\models.py:70
+msgctxt "help text for Post model"
+msgid "Select categories"
+msgstr ""
+
+#: .\templates\account\email\email_confirmation_message.txt:5
+#, python-format
+msgid ""
+"Вы получили это сообщение, потому что пользователь %(user_display)s указал "
+"этот email при регистрации на сайте %(site_domain)s.\n"
+"\n"
+"Для подтверждения регистрации пройдите по ссылке %(activate_url)s\n"
+"\n"
+"Хорошего дня!\n"
+msgstr ""
+
+#: .\templates\article.html:35 .\templates\news.html:35
+#: .\templates\post.html:36 .\templates\posts.html:31
+msgid "Выйти из аккаунта"
+msgstr "Log out account"
+
+#: .\templates\article.html:37 .\templates\news.html:37
+#: .\templates\post.html:38 .\templates\posts.html:33
+msgid "Войти в аккаунт"
+msgstr "Log in account"
+
+#: .\templates\article.html:40
+msgid "Все статьи"
+msgstr "All articles"
+
+#: .\templates\article.html:41 .\templates\news.html:40
+msgid "Количество"
+msgstr "Quantity"
+
+#: .\templates\article.html:43
+msgid "Вы являетесь автором и можете добавлять статьи"
+msgstr "You are the author and can add articles"
+
+#: .\templates\article.html:47 .\templates\news.html:46
+msgid "Стать автором"
+msgstr "Become an author"
+
+#: .\templates\article.html:53
+msgid "Добавить статью"
+msgstr "Add article"
+
+#: .\templates\article.html:58 .\templates\news.html:58
+#: .\templates\post.html:40
+msgid "Заголовок"
+msgstr "Title"
+
+#: .\templates\article.html:59 .\templates\news.html:59
+#: .\templates\post.html:41
+msgid "Дата публикации"
+msgstr "Date of publication"
+
+#: .\templates\article.html:60 .\templates\news.html:60
+#: .\templates\post.html:42
+msgid "Категории"
+msgstr "Categories"
+
+#: .\templates\article.html:61 .\templates\news.html:61
+#: .\templates\post.html:45
+msgid "Содержание"
+msgstr "Content"
+
+#: .\templates\article.html:63 .\templates\news.html:65
+msgid "Действия"
+msgstr "Actions"
+
+#: .\templates\article.html:77 .\templates\news.html:79
+#: .\templates\news_update.html:13 .\templates\post.html:51
+msgid "Изменить"
+msgstr "To change"
+
+#: .\templates\article.html:85
+msgid "Список статей пуст"
+msgstr "The articles list is empty!"
+
+#: .\templates\flatpages\default.html:11 .\templates\flatpages\default.html:21
+msgid "Новостной портал"
+msgstr "News portal"
+
+#: .\templates\flatpages\default.html:31
+msgid "Домой"
+msgstr "Home"
+
+#: .\templates\flatpages\default.html:32
+msgid "текущая"
+msgstr "current"
+
+#: .\templates\flatpages\default.html:36
+msgid "О нас"
+msgstr "About us"
+
+#: .\templates\flatpages\default.html:39
+msgid "Контакты"
+msgstr "Contacts"
+
+#: .\templates\news.html:39
+msgid "Все новости"
+msgstr "All news"
+
+#: .\templates\news.html:42
+msgid "Вы являетесь автором и можете добавлять новости"
+msgstr "You are the author and can add news"
+
+#: .\templates\news.html:52
+msgid "Добавить новость"
+msgstr "Add News"
+
+#: .\templates\news.html:88
+msgid "Список новостей пуст!"
+msgstr "The news list is empty!"
+
+#: .\templates\news_create.html:8
+msgid "Создание новости"
+msgstr "Creating news"
+
+#: .\templates\news_create.html:13
+msgid "Создать"
+msgstr "To create"
+
+#: .\templates\news_update.html:8
+msgid "Изменение новости"
+msgstr "Changing the news"
+
+#: .\templates\post.html:55
+msgid "Комментарии"
+msgstr "Comments"
+
+#: .\templates\post.html:60
+msgid "Введите Ваш комментарий здесь"
+msgstr "Enter your comment here"
+
+#: .\templates\post.html:61 .\templates\post.html:74
+msgid "Отправить"
+msgstr "Send"
+
+#: .\templates\post.html:65
+msgid "Оставлять комментарии могут только зарегистрированные пользователи"
+msgstr "Only registered users can leave comments"
+
+#: .\templates\post.html:73
+msgid "Ответить"
+msgstr "To answer"
+
+#: .\templates\posts.html:35
+msgid "Выберете категорию для просмотра"
+msgstr "Select a category to view"
+
+#: .\templates\posts.html:36
+msgid "Новости"
+msgstr "News"
+
+#: .\templates\posts.html:37
+msgid "Статьи"
+msgstr "Articles"

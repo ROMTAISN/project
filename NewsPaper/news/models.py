@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.translation import gettext as _
+from django.utils.translation import pgettext_lazy
 from django.db.models import Sum
 from django.urls import reverse
 from django.core.cache import cache
@@ -39,7 +41,7 @@ class Author(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=128, unique=True, verbose_name='Название')
+    name = models.CharField(max_length=128, unique=True, help_text=_('category name'), verbose_name='Название')
     subcsribers = models.ManyToManyField(User, blank=True, related_name='categories')
 
     def get_category(self):
@@ -64,7 +66,8 @@ class Post(models.Model):
     )
     category_type = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=NEWS, verbose_name='Тип')
     date_time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    categoryPost = models.ManyToManyField(Category, through='PostCategory', related_name='category', verbose_name='Категория')
+    categoryPost = models.ManyToManyField(Category, through='PostCategory', related_name='category',
+                                          verbose_name=pgettext_lazy('help text for Post model', 'Select categories'))
     heading = models.CharField(max_length=255, verbose_name='Заголовок')
     content = models.TextField(verbose_name='Текст')
     ratting_post = models.SmallIntegerField(default=0, verbose_name='Рейтинг поста')

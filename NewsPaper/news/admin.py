@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import Author, Category, Post, Comment
+from modeltranslation.admin import TranslationAdmin
 # from .forms import PostForm
 # Register your models here.
 
@@ -31,6 +32,17 @@ class CategoryAdmin(admin.ModelAdmin):
     list_filter = ('name', 'subcsribers')
     search_fields = ('name',)
     actions = []
+
+
+class CategoryAdmin(TranslationAdmin):
+    model = Category
+
+
+class PostAdmin(TranslationAdmin):
+    model = Post
+
+class CommentAdmin(TranslationAdmin):
+    model = Comment
 
 
 admin.site.register(Author, AuthorAdmin)
